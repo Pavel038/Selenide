@@ -26,7 +26,7 @@ public class ChromeTest {
         $("label[data-test-id='agreement']").click();
         $x("//span[contains(text(), 'Забронировать')]").click();
         $x("//div[@data-test-id='notification']").should(Condition.visible, Duration.ofSeconds(15));
-        String expected = "dbsdfbdfbfbdb";
+        String expected = "Встреча успешно забронирована на 14.03.2023";
         String actual = $x("//div[@class='notification__content']").getText();
         assertEquals(expected,actual);
 
