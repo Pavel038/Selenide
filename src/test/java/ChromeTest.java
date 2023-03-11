@@ -17,12 +17,12 @@ public class ChromeTest {
     void test() {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999/");
-        $x("//input[@placeholder='Город']").setValue("Владикавказ");
+        $("[data-test-id='city'] input").setValue("Владикавказ");
         $x("//input[@placeholder='Дата встречи']").doubleClick();
         $x("//input[@placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
         $x("//input[@placeholder='Дата встречи']").setValue("14.03.2023");
-        $("input[name='name']").setValue("Иван Петров-Иванов");
-        $("input[name='phone']").setValue("+79996788965");
+        $("[data-test-id='name'] input").setValue("Иван Петров-Иванов");
+        $("[data-test-id='phone'] input").setValue("+79996788965");
         $("label[data-test-id='agreement']").click();
         $x("//span[contains(text(), 'Забронировать')]").click();
         $x("//div[@data-test-id='notification']").should(Condition.visible, Duration.ofSeconds(15));
