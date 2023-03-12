@@ -6,29 +6,37 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 
 import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static com.codeborne.selenide.Selenide.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class ChromeTest {
+    String planningDate = generateDate(4);
+
+    public String generateDate(int days) {
+        return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
 
     @Test
     void test() {
+        String planningDate = generateDate(4);
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999/");
-        $x("//input[@placeholder='Город']").setValue("Владикавказ");
+        $("[data-test-id='city'] input").setValue("Владикавказ");
         $x("//input[@placeholder='Дата встречи']").doubleClick();
         $x("//input[@placeholder='Дата встречи']").sendKeys(Keys.BACK_SPACE);
-        $x("//input[@placeholder='Дата встречи']").setValue("14.03.2023");
-        $("input[name='name']").setValue("Иван Петров-Иванов");
-        $("input[name='phone']").setValue("+79996788965");
+        $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
+        $("[data-test-id='name'] input").setValue("Иван Петров-Иванов");
+        $("[data-test-id='phone'] input").setValue("+79996788965");
         $("label[data-test-id='agreement']").click();
         $x("//span[contains(text(), 'Забронировать')]").click();
-        $x("//div[@data-test-id='notification']").should(Condition.visible, Duration.ofSeconds(15));
-        String expected = "Встреча успешно забронирована на 14.03.2023";
-        String actual = $x("//div[@class='notification__content']").getText();
-        assertEquals(expected,actual);
+        $x("//div[@data-test-id='notification']")
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate), Duration.ofSeconds(15))
+                .shouldBe(Condition.visible);
 
     }
 
